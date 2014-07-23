@@ -1,0 +1,59 @@
+
+Readings:
+=========
+[1] https://github.com/agl/crlset-tools
+[2] https://www.grc.com/revocation/crlsets.htm
+
+
+Download CRLSET from Google
+===================
+
+[1] Download CRLSET
+             follow the steps at https://github.com/agl/crlset-tools
+
+[2] Dump it into a text file
+             crlset dump crl-set > crl-set-dump.txt
+
+
+See which of NIC or CCA certificates are blocked by CRLSET
+======================================
+             ./crlset dump crl-set ../nic_certificate_chain/CCA\ India\ 2011.cer
+             2791
+             
+             ./crlset dump crl-set ../cca_certificate_chain/cca\ india\ 2007.cer 
+              278d
+
+
+
+See if a specific web certificate present in CRLSET
+=================================
+Note: imap.gmail.com.pem is the certificate which 
+
+
+[1] Get shat256 signature of the faked key
+
+             openssl x509 -pubkey -noout -in  imap.gmail.com.pem  | openssl base64 -d | openssl dgst -sha256
+
+             (stdin)= c04bb694cb1dc3ca238d925bde2615512738b55c69820d990bf474b2add2acbf
+
+[2] Hexadecimal signature output into base64 encoding, format used by Google's crlset
+
+             openssl x509 -pubkey -noout -in  imap.gmail.com.pem  | openssl base64 -d | openssl dgst -binary -sha256 | openssl base64 -e
+
+             wEu2lMsdw8ojjZJb3iYVUSc4tVxpgg2ZC/R0sq3SrL8=
+
+
+[5] Now you can check if has keys produced in step 1 or step 2 exists inside crl-set-dump.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
